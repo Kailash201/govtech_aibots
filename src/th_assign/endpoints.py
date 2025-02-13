@@ -1,6 +1,16 @@
 from fastapi import FastAPI
+from contextlib import asynccontextmanager
 
-app = FastAPI()
+from .database import Database, AgentModel
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await Database.init()
+    yield
+    
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")
@@ -8,10 +18,10 @@ def home():
     return "home"
 
 
-@app.post("/agents")
-def create_agent():
-    
-    #return id
+@app.get("/agents")
+async def create_agent():
+    tmp = await AgentModel(name="tmp").insert()
+    return tmp
     pass
 
 
