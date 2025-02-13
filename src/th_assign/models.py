@@ -4,7 +4,7 @@ from pydantic import BaseModel
 
 
 class Query(BaseModel):
-    message: str
+    content: str
 
 
 class AgentModel(Document):

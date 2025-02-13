@@ -6,6 +6,8 @@ from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 
 
+from .models import Query
+
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -16,19 +18,19 @@ class State(TypedDict):
     remaining_steps: any
 
 class Agent:
-    def __init__(self, model_name, api_key=os.getenv("OPENAI_API_KEY")):
+    def __init__(self, tools, model_name, api_key=os.getenv("OPENAI_API_KEY")):
         self.model = ChatOpenAI(
             model=model_name,
             temperature=0,
             api_key=api_key
         )
 
-        self.react_agent = create_react_agent(model=self.model, tools=[], state_schema=State)
+        self.react_agent = create_react_agent(model=self.model, tools=tools)
 
     def add_tools(self):
         pass
 
-    def invoke_agent(self, query, *args):
+    def invoke_agent(self, query: Query, *args):
         system_message = "You are a research agent whose task is to use appropriate tools if needed to research on a user question"
         task_message = "The user question is {query}"
         prt_template = ChatPromptTemplate.from_messages(
@@ -37,14 +39,13 @@ class Agent:
                 ('user', task_message)
             ]
         )
-        filled_template = prt_template.format(query=query)
+        filled_template = prt_template.format(query=query.content)
         res = self.react_agent.invoke(
-            {"sys_msg": system_message, "query": query, "messages": [filled_template]}
+            {
+                # "sys_msg": system_message, 
+                # "query": query, 
+                "messages": [filled_template]}
         )
+        print(res['messages'])
         return res['messages'][-1].content
         
-
-
-tmp = Agent("gpt-4o-mini")
-res = tmp.invoke_agent("hi")
-print(res)

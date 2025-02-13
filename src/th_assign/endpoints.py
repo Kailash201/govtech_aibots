@@ -3,7 +3,7 @@ from contextlib import asynccontextmanager
 
 from .database import Database
 from .models import AgentModel, Query
-
+from .agent import Agent
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -48,8 +48,14 @@ def todo():
     pass
 
 
-@app.put("/agents/{agent_id}/queries")
-def query_agent(message: Query):
-    
+@app.post("/agents/{agent_id}/queries")
+def query_agent(agent_id: int, message: Query):
+    from .tools import wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool
+    tools = [wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool]
+    agent = Agent(
+        tools=tools,
+        model_name='gpt-4o-mini'
+    )
+    res = agent.invoke_agent(message)
     #return response
-    pass
+    return res
