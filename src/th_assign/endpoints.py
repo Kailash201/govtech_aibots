@@ -1,9 +1,12 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
 from .database import Database
 from .models import AgentModel, Query
 from .agent import Agent
+from .tools import wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool
+
+from typing import List
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -20,10 +23,15 @@ def home():
 
 
 @app.post("/agents", status_code=201)
-async def create_agent():
-    new_agent = await AgentModel(_id=6, name="ResearchAgent").insert()
+async def create_agent(files: List[str], websites: List[str]):
+    new_agent = await AgentModel(
+        name="ResearchAgent",
+        files=files,
+        websites=websites
+        ).insert()
+    
     to_ret = {
-        "agent_id": new_agent
+        "agent_id": new_agent.id
     }
     return to_ret
 
@@ -52,7 +60,6 @@ def todo():
 
 @app.post("/agents/{agent_id}/queries", status_code=201)
 def query_agent(agent_id: int, message: Query):
-    from .tools import wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool
     tools = [wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool]
     agent = Agent(
         tools=tools,
