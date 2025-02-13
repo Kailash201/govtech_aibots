@@ -1,7 +1,8 @@
 from fastapi import FastAPI
 from contextlib import asynccontextmanager
 
-from .database import Database, AgentModel
+from .database import Database
+from .models import AgentModel, Query
 
 
 @asynccontextmanager
@@ -48,6 +49,7 @@ def todo():
 
 
 @app.put("/agents/{agent_id}/queries")
-def query_agent():
+def query_agent(message: Query):
+    
     #return response
     pass
