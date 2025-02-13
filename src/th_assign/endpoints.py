@@ -18,23 +18,24 @@ def home():
     return "home"
 
 
-@app.get("/agents")
+@app.post("/agents")
 async def create_agent():
-    tmp = await AgentModel(name="tmp").insert()
-    return tmp
-    pass
+    new_agent = await AgentModel(_id=4, name="ResearchAgent").insert()
+    return new_agent.id
 
 
 @app.get("/agents/{agent_id}")
-def get_agent():
-
+async def get_agent(agent_id: int):
+    agentDoc = await AgentModel.find_one(AgentModel.id == agent_id)
     #return id, name
-    pass
+    return agentDoc
 
 
 @app.delete("/agents/{agent_id}")
-def delete_agent():
-    pass
+async def delete_agent(agent_id: int):
+    agentDoc = await AgentModel.find_one(AgentModel.id == agent_id)
+    await agentDoc.delete()
+    return True
 
 
 @app.put("/agents/{agent_id}/websites")
