@@ -13,6 +13,7 @@ class FileDocument(Document):
     name: str
     content: bytes
     content_type: str
+    extracted_content: str | None
 
 
 class AgentModel(Document):

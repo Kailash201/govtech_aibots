@@ -29,7 +29,8 @@ async def create_agent(files: List[UploadFile] | None, websites: List[str] | Non
         FileDocument(
             name=f.filename, 
             content=await f.read(), 
-            content_type=f.content_type)
+            content_type=f.content_type,
+            extracted_content=None)
         for f in files
         ]
     
@@ -56,6 +57,21 @@ async def get_agent(agent_id: str):
         "websites": agentDoc.websites,
         "messages": []
     }
+
+    ## TESTING, TO DELETE
+    from .filetypes.pdfModel import PDFModel
+    from .filetypes.docModel import DOCModel
+    from .filetypes.docxModel import DOCXModel
+    from .filetypes.pptModel import PPTModel
+    from .filetypes.pptxModel import PPTXModel
+    from .filetypes.xlsModel import XLSModel
+    from .filetypes.xlsxModel import XLSXModel
+
+    tmp = PPTModel(
+        filename="sdf",
+        content=agentDoc.files[0].content
+    )
+    print(tmp.extract_text())
     return to_ret
 
 
