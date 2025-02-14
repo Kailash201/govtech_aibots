@@ -1,12 +1,13 @@
-from fastapi import FastAPI
+from fastapi import FastAPI, File, UploadFile
 from contextlib import asynccontextmanager
 
 from .database import Database
-from .models import AgentModel, Query
+from .models import AgentModel, Query, FileDocument
 from .agent import Agent
 from .tools import wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool
 
 from typing import List
+import uuid
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -23,34 +24,60 @@ def home():
 
 
 @app.post("/agents", status_code=201)
-async def create_agent(files: List[str], websites: List[str]):
+async def create_agent(files: List[UploadFile] | None, websites: List[str] | None):
+    files_to_save: List[FileDocument] = [
+        FileDocument(
+            name=f.filename, 
+            content=await f.read(), 
+            content_type=f.content_type)
+        for f in files
+        ]
+    
     new_agent = await AgentModel(
         name="ResearchAgent",
-        files=files,
-        websites=websites
+        files=files_to_save,
+        websites=websites,
         ).insert()
-    
+
     to_ret = {
         "agent_id": new_agent.id
     }
+    
     return to_ret
 
 
 @app.get("/agents/{agent_id}")
-async def get_agent(agent_id: int):
-    agentDoc = await AgentModel.find_one(AgentModel.id == agent_id)
-    return agentDoc
+async def get_agent(agent_id: str):
+    agentDoc = await AgentModel.get(uuid.UUID(agent_id))
+    to_ret = {
+        "_id": agentDoc.id,
+        "name": agentDoc.name,
+        "files": [f.name for f in agentDoc.files],
+        "websites": agentDoc.websites,
+        "messages": []
+    }
+    return to_ret
 
 
 @app.delete("/agents/{agent_id}", status_code=204)
-async def delete_agent(agent_id: int):
-    agentDoc = await AgentModel.find_one(AgentModel.id == agent_id)
+async def delete_agent(agent_id: str):
+    agentDoc = await AgentModel.find_one(AgentModel.id == uuid.UUID(agent_id))
     await agentDoc.delete()
     return 
 
 
 @app.put("/agents/{agent_id}/websites")
 def todo():
+    # from unstructured.partition.pdf import partition_pdf
+    
+    # print(files)
+    
+    
+    # tmp = await files.read()
+    # elements = partition_pdf(file=files.file)
+    # for e in elements:
+    #     print(e.text)
+    # print(elements)
     pass
 
 @app.put("/agents/{agent_id}/files")
@@ -59,7 +86,7 @@ def todo():
 
 
 @app.post("/agents/{agent_id}/queries", status_code=201)
-def query_agent(agent_id: int, message: Query):
+def query_agent(agent_id: str, message: Query):
     tools = [wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool]
     agent = Agent(
         tools=tools,
