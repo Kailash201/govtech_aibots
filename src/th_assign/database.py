@@ -8,7 +8,7 @@ class Database:
     
     @staticmethod
     async def init():
-        client = AsyncIOMotorClient("mongodb://localhost:27017")
+        client = AsyncIOMotorClient("mongodb://mongo:27017")
         await init_beanie(
             database=client.govtech, document_models=[AgentModel, FileDocument, WebsiteDocument]
         )

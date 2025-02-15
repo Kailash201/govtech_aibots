@@ -1,4 +1,4 @@
-from fastapi import FastAPI, File, UploadFile
+from fastapi import FastAPI, UploadFile, HTTPException
 from contextlib import asynccontextmanager
 
 from pydantic import BaseModel
@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from th_assign.filetypes.modelFactory import FileModelFactory
 
 from .database import Database
-from .models import AgentModel, Query, FileDocument, WebsiteDocument
+from .models import AgentModel, FileDocument, WebsiteDocument
 from .agent import Agent
 from .tools import wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool
 
@@ -20,11 +20,6 @@ async def lifespan(app: FastAPI):
     
 
 app = FastAPI(lifespan=lifespan)
-
-
-@app.get("/")
-def home():
-    return "home"
 
 
 @app.post("/agents", status_code=201)
@@ -109,14 +104,17 @@ async def extract_files(agent_id: str, files: List[UploadFile]):
     
     for fileModel, fileDoc in files_to_extract:
         extracted_text = fileModel.extract_text()
+        print(fileModel.get_extension())
         print(extracted_text)
+        print()
         fileDoc.extracted_content = extracted_text
         await agentDoc.save()
     
     return
 
 @app.post("/agents/{agent_id}/queries", status_code=201)
-async def query_agent(agent_id: str, message: Query):
+async def query_agent(agent_id: str, query: str):
+    print(1)
     tools = [wikipedia_tool, arxiv_tool, pubmed_tool, ddg_search_tool]
     agentDoc = await AgentModel.find_one(AgentModel.id == uuid.UUID(agent_id))
     
@@ -138,13 +136,17 @@ async def query_agent(agent_id: str, message: Query):
     )
 
     context_tokens = agent.tokenize(total_context)
+    
     if context_tokens > 120000:
-        print("rr")
-        return
+        return HTTPException(
+            status_code=413,
+            detail= "The knowledge added to agent exceeds the maximum allowable context of 120k tokens",
+            headers={"Error": "ExceededLLMContextLimit"}
+            )
     
     res = agent.invoke_agent(
         knowledge_base=total_context, 
-        query=message
+        query=query
         )
     
     to_ret = {

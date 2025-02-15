@@ -5,9 +5,6 @@ from fastapi import UploadFile
 from pydantic import BaseModel, Field
 from typing import List
 
-class Query(BaseModel):
-    content: str
-
 
 class FileDocument(Document):
     name: str

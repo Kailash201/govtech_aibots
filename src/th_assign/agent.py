@@ -6,16 +6,10 @@ from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
 import tiktoken
 
-from .models import Query
 
 from dotenv import load_dotenv
 load_dotenv()
 
-class State(TypedDict):
-    query: str
-    sys_msg: str
-    messages: any
-    remaining_steps: any
 
 class Agent:
     def __init__(self, tools, model_name, api_key=os.getenv("OPENAI_API_KEY")):
@@ -51,7 +45,7 @@ class Agent:
         num_tokens = len(encoding.encode(text))
         return num_tokens
 
-    def invoke_agent(self, knowledge_base: str, query: Query):
+    def invoke_agent(self, knowledge_base: str, query: str):
         task_message = "The user question is {query}"
         prt_template = ChatPromptTemplate.from_messages(
             [
@@ -60,7 +54,7 @@ class Agent:
             ]
         )
         filled_template = prt_template.format(
-                query=query.content,
+                query=query,
                 context=knowledge_base
             )
         res = self.react_agent.invoke(
