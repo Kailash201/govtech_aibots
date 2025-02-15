@@ -1,5 +1,6 @@
 from beanie import Document
-from ..models import WebsiteDocument, FileDocument
+
+from ..beanieModels import WebsiteDocument, FileDocument
 from .websiteModel import WebsiteModel
 from .pdfModel import PDFModel
 from .docModel import DOCModel

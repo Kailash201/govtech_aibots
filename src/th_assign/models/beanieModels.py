@@ -1,16 +1,14 @@
-from uuid import UUID, uuid4
 from beanie import Document
-
-from fastapi import UploadFile
-from pydantic import BaseModel, Field
+from pydantic import Field
 from typing import List
-
+from uuid import UUID, uuid4
 
 class FileDocument(Document):
     name: str
     content: bytes
     content_type: str
     extracted_content: str | None
+
 
 class WebsiteDocument(Document):
     url: str
@@ -26,7 +24,3 @@ class AgentModel(Document):
 
     class Settings:
         name = "agents"
-
-
-
-    

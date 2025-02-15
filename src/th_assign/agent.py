@@ -1,14 +1,10 @@
-import os
-from typing import TypedDict
-
+from dotenv import load_dotenv
+load_dotenv()
 from langchain_core.prompts import ChatPromptTemplate
 from langchain_openai import ChatOpenAI
 from langgraph.prebuilt import create_react_agent
+import os
 import tiktoken
-
-
-from dotenv import load_dotenv
-load_dotenv()
 
 
 class Agent:

@@ -1,16 +1,14 @@
-import io
-from th_assign.filetypes.fileModel import FileModel
-from unstructured.partition.xlsx import partition_xlsx
+from unstructured.partition.html import partition_html
 
+from .fileModel import FileModel
 
-class XLSModel(FileModel):
+class WebsiteModel(FileModel):
     def __init__(self, filename, content):
         self.filename = filename
         self.content = content
 
     def extract_text(self):
-        file_content = io.BytesIO(self.content) 
-        elements = partition_xlsx(file=file_content)
+        elements = partition_html(url=self.content)
         extracted_text = ""
         for e in elements:
             extracted_text += e.text
@@ -18,4 +16,4 @@ class XLSModel(FileModel):
         return extracted_text
     
     def get_extension(self):
-        return ".xls"
+        return ".html"
