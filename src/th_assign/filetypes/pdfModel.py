@@ -10,7 +10,10 @@ class PDFModel(FileModel):
 
     def extract_text(self):
         file_content = io.BytesIO(self.content) 
-        elements = partition_pdf(file=file_content)
+        elements = partition_pdf(
+            file=file_content,
+            strategy="hi_res",                                     
+            )
         extracted_text = ""
         for e in elements:
             extracted_text += e.text

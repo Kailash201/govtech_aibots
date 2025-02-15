@@ -102,7 +102,6 @@ class ExtractFileRequest(BaseModel):
 @app.put("/agents/{agent_id}/files", status_code=204)
 async def extract_files(agent_id: str, files: List[UploadFile]):
     agentDoc = await AgentModel.find_one(AgentModel.id == uuid.UUID(agent_id))
-    
     files_to_extract = [
         (FileModelFactory.create(agent_file_doc), agent_file_doc)
         for f in files for agent_file_doc in agentDoc.files if f.filename == agent_file_doc.name
@@ -110,6 +109,7 @@ async def extract_files(agent_id: str, files: List[UploadFile]):
     
     for fileModel, fileDoc in files_to_extract:
         extracted_text = fileModel.extract_text()
+        print(extracted_text)
         fileDoc.extracted_content = extracted_text
         await agentDoc.save()
     
