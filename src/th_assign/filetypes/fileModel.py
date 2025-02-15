@@ -3,7 +3,7 @@ from abc import ABC, abstractmethod
 
 class FileModel(ABC):
     @abstractmethod
-    def __init__(self, filename: str, content: bytes):
+    def __init__(self, filename: str, content: bytes | str):
         pass
 
     @abstractmethod

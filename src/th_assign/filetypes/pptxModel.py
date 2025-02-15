@@ -18,4 +18,4 @@ class PPTXModel(FileModel):
         return extracted_text
     
     def get_extension(self):
-        return ".doc"
+        return ".pptx"

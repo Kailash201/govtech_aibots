@@ -1,17 +1,13 @@
-import io
-from th_assign.filetypes.fileModel import FileModel
-from unstructured.partition.ppt import partition_ppt
+from unstructured.partition.html import partition_html
+from .fileModel import FileModel
 
-#NEED INSTALL LIBRE
-
-class PPTModel(FileModel):
+class WebsiteModel(FileModel):
     def __init__(self, filename, content):
         self.filename = filename
         self.content = content
 
     def extract_text(self):
-        file_content = io.BytesIO(self.content) 
-        elements = partition_ppt(file=file_content)
+        elements = partition_html(url=self.content)
         extracted_text = ""
         for e in elements:
             extracted_text += e.text
@@ -19,4 +15,4 @@ class PPTModel(FileModel):
         return extracted_text
     
     def get_extension(self):
-        return ".ppt"
+        return ".html"

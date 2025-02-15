@@ -18,4 +18,4 @@ class XLSModel(FileModel):
         return extracted_text
     
     def get_extension(self):
-        return ".doc"
+        return ".xls"
