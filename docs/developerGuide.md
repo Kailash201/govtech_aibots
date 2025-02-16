@@ -15,7 +15,7 @@ Several classes to created to model certain objects. Below are details on these 
 
 - **Beanie models Class UML Diagram**:
 ![Beanie Models UML](/docs/beanie_models.png)
-*All the clases here inherit from Beanie's Document class
+*All the clases here inherit from Beanie's Document class.
 
 - **Filetype Models Class UML Diagram:**
 ![FileType Class Models UML](/docs/file_models.png)
@@ -24,6 +24,8 @@ The **tests** folder holds test cases for the app.
 
 
 #### Possible improvements
-In the current design, the files and websites are stored into the database when user creates agent.
+ - In the current design, the files and websites are stored into the database when user creates agent.
+ 
+    Due to this, the user does not need send over files again into the put request for extracting file text, as the files are already stored into the db.
 
-Due to this, the user does not need send over files again into the put request for extracting file text, as the files are already stored into the db.
+- Text extraction from image only works for pdf files. To include support for other file types, maybe can convert those into pdf format and run the pdf extraction logic on it.

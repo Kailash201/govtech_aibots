@@ -43,9 +43,6 @@ async def extract_files(agent_id):
             ('files', open('tests/files/samplepptx.pptx', 'rb')),
         ]
     
-    websites = {
-       "websites": ["https://www.cancer.gov/about-cancer/understanding/what-is-cancer"]
-    }
     
     async with httpx.AsyncClient() as client:
         response = await client.put(url=f"{rl}/{agent_id}/{req}", 
@@ -123,24 +120,27 @@ async def delete_agent(agent_id):
 async def main():
     agent_id = await create_agent_request() #Adding of files and websites is inside here
     agent_id = agent_id['agent_id']
-    print(f"agent_id: {agent_id}")
+    print(f"agent_id: {agent_id}\n")
 
     res = await extract_files(agent_id)
-    print(f"extract files response: {res}")
+    print(f"extract files response: {res}\n")
 
     res = await extract_websites(agent_id)
-    print(f"extract website response: {res}")
+    print(f"extract website response: {res}\n")
 
     query = {'query': "What is cancer?"}
 
     res = await query_agent(agent_id, query)
-    print(f"query agent response: {res}")
+    print(f"query agent response: {res}\n")
 
     res = await get_agent(agent_id)
-    print(f"get agent response: {res}")
+    print(f"get agent response: {res}\n")
     
     res = await delete_agent(agent_id)
-    print(f"delete agent response: {res}")
+    print(f"delete agent response: {res}\n")
+
+    res = await get_agent(agent_id)
+    print(f"get agent response should fail after deleing: {res}\n")
 
 
 asyncio.run(main())
