@@ -20,37 +20,37 @@ class FileModelFactory:
                 content=obj.url
             )
         elif isinstance(obj, FileDocument):
-            if obj.content_type == "application/pdf":
+            if obj.content_type == ".pdf":
                 return PDFModel(
                     filename=obj.name,
                     content=obj.content
                 )
-            elif obj.content_type == "application/msword":
+            elif obj.content_type == ".doc":
                 return DOCModel(
                     filename=obj.name,
                     content=obj.content
                 )
-            elif obj.content_type == "application/vnd.openxmlformats-officedocument.wordprocessingml.document":
+            elif obj.content_type == ".docx":
                 return DOCXModel(
                     filename=obj.name,
                     content=obj.content
                 )
-            elif obj.content_type == "application/vnd.ms-powerpoint":
+            elif obj.content_type == ".ppt":
                 return PPTModel(
                     filename=obj.name,
                     content=obj.content
                 )
-            elif obj.content_type == "application/vnd.openxmlformats-officedocument.presentationml.presentation":
+            elif obj.content_type == ".pptx":
                 return PPTXModel(
                     filename=obj.name,
                     content=obj.content
                 )
-            elif obj.content_type == "application/vnd.ms-excel":
+            elif obj.content_type == ".xls":
                 return XLSModel(
                     filename=obj.name,
                     content=obj.content
                 )
-            elif obj.content_type == "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet":
+            elif obj.content_type == ".xlsx":
                 return XLSXModel(
                     filename=obj.name,
                     content=obj.content

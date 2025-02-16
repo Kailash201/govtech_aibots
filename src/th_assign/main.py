@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI, UploadFile, HTTPException
+import os
 from typing import List
 import uuid
 
@@ -26,7 +27,7 @@ async def create_agent(files: List[UploadFile] | None, websites: List[str] | Non
         FileDocument(
             name=f.filename, 
             content=await f.read(), 
-            content_type=f.content_type,
+            content_type=os.path.splitext(f.filename)[-1],
             extracted_content=None)
         for f in files
         ]
