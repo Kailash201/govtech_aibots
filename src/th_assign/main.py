@@ -85,7 +85,8 @@ async def extract_websites(agent_id: str, websites: WebsiteReq):
     for webModel, webDoc in websites_to_extract:
         extracted_text = webModel.extract_text()
         webDoc.extracted_content = extracted_text
-        await agentDoc.save()
+    
+    await agentDoc.save()
         
     return
 
@@ -104,7 +105,7 @@ async def extract_files(agent_id: str, files: List[UploadFile]):
         print(extracted_text)
         print()
         fileDoc.extracted_content = extracted_text
-        await agentDoc.save()
+    await agentDoc.save()
     
     return
 

@@ -17,7 +17,7 @@ async def create_agent_request():
     # ADD THE WEBSITES HERE
     data = {
         "websites": [
-            "https://www.mayoclinic.org/diseases-conditions/lung-cancer/symptoms-causes/syc-20374620",
+            "https://www.cancer.org/cancer/types/lung-cancer/about/what-is.html",
             "https://www.gleneagles.com.sg/conditions-diseases/lung-cancer/symptoms-causes"
         ]
     }
@@ -64,7 +64,7 @@ async def extract_websites(agent_id):
     
     websites = {
        "urls": [
-            "https://www.mayoclinic.org/diseases-conditions/lung-cancer/symptoms-causes/syc-20374620",
+            "https://www.cancer.org/cancer/types/lung-cancer/about/what-is.html",
             "https://www.gleneagles.com.sg/conditions-diseases/lung-cancer/symptoms-causes"
             ]
     }
@@ -139,8 +139,8 @@ async def main():
     res = await get_agent(agent_id)
     print(f"get agent response: {res}")
     
-    res = await delete_agent(agent_id)
-    print(f"delete agent response: {res}")
+    # res = await delete_agent(agent_id)
+    # print(f"delete agent response: {res}")
 
 
 asyncio.run(main())
