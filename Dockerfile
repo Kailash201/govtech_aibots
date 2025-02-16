@@ -15,8 +15,23 @@ RUN apt-get update && apt-get install -y \
 COPY requirements.txt .
 
 # Install dependencies
-RUN pip install --no-cache-dir -r requirements.txt
-# RUN pip install 'unstructured[docx,pptx,pdf,doc,ppt,xlsx]'
+RUN pip install python-multipart
+RUN pip install pytest httpx
+RUN pip install -U duckduckgo-search
+RUN pip install arxiv
+RUN pip install xmltodict
+RUN pip install wikipedia
+RUN pip install langchain_community
+RUN pip install langchain
+RUN pip install beanie
+RUN pip install 'fastapi[standard]'
+RUN pip install python-dotenv
+RUN pip install langchain_openai
+RUN pip install langgraph
+RUN pip install unstructured
+RUN pip install tiktoken
+RUN pip install docx
+RUN pip install 'unstructured[docx,pptx,pdf,doc,ppt,xlsx]'
 
 # Copy the entire application
 COPY . .
