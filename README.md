@@ -1,4 +1,4 @@
-## Technical Assignment
+## Technical Assignment (inc. bonus assignment)
 
 ### Building the docker container
 
