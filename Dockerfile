@@ -25,4 +25,4 @@ COPY . .
 EXPOSE 8000
 
 # Run the application
-CMD ["fastapi", "run", "src/th_assign/endpoints.py" ,"--host", "0.0.0.0", "--port", "8000"]
+CMD ["fastapi", "run", "src/th_assign/main.py" ,"--host", "0.0.0.0", "--port", "8000"]
