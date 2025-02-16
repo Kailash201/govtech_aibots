@@ -60,7 +60,7 @@ async def get_agent(agent_id: str):
         "_id": agentDoc.id,
         "name": agentDoc.name,
         "files": [f.name for f in agentDoc.files],
-        "websites": agentDoc.websites,
+        "websites": [w.url for w in agentDoc.websites],
         "messages": []
     }
 
