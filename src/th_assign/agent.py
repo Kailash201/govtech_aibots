@@ -24,12 +24,9 @@ class Agent:
             tools provided to you to answer the user question.
             
             Context: {context}
-            '''
+            ''' 
 
-    def add_tools(self):
-        pass
-
-    def tokenize(self, text):
+    def tokenize(self, text: str) -> int:
         model_to_encoding_map = {
             "gpt-4o-mini": "o200k_base",
             "gpt-4o": "o200k_base",
@@ -41,7 +38,7 @@ class Agent:
         num_tokens = len(encoding.encode(text))
         return num_tokens
 
-    def invoke_agent(self, knowledge_base: str, query: str):
+    def invoke_agent(self, knowledge_base: str, query: str) -> str:
         task_message = "The user question is {query}"
         prt_template = ChatPromptTemplate.from_messages(
             [
