@@ -11,9 +11,6 @@ RUN apt-get update && apt-get install -y \
     libtesseract-dev \
     poppler-utils
 
-# Copy only the requirements first for better caching
-COPY requirements.txt .
-
 # Install dependencies
 RUN pip install python-multipart
 RUN pip install pytest httpx
